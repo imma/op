@@ -6,7 +6,7 @@ function main {
 
   local nm_account="$1"; shift
 
-  export OP_SESSION="$(gpg2 -q -d "${BOARD_PATH}/.op/${nm_account}.gpg" | op signin "${nm_account}" --output=raw)"
+  export "OP_SESSION_${nm_account}"="$(gpg2 -q -d "${BOARD_PATH}/.op/${nm_account}.gpg" | op signin "${nm_account}" --output=raw)"
   
   if [[ "$#" == 0 ]]; then
     exec "$SHELL"
@@ -15,4 +15,4 @@ function main {
   fi
 }
 
-source sub-chain "$BASH_SOURCE" "$@"
+source sub "$BASH_SOURCE" "$@"

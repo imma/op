@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile"
+
+  local nm_title="$1"; shift
+
+  local last=
+  while true; do
+    local code="$(op totp "$nm_title")"
+    if [[ "$last" == "$code" ]]; then
+      sleep 1
+      continue
+    fi
+    echo "$code"
+    last="$code"
+  done
+}
+
+source sub "$BASH_SOURCE" "$@"
