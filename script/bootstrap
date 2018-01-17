@@ -3,8 +3,20 @@
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile"
+  source normalize
 
-  uname -a
+  local url_op_Darwin="https://cache.agilebits.com/dist/1P/op/pkg/v${OP_VERSION}/op_darwin_amd64_v${OP_VERSION}.zip"
+  local url_op_Linux="https://cache.agilebits.com/dist/1P/op/pkg/v${OP_VERSION}/op_linux_amd64_v${OP_VERSION}.zip"
+
+  local url_op="url_op_$(uname -s)"
+  local fnm_op="$(basename "${!url_op}")-${OP_VERSION}"
+  cache curl "$fnm_op" "${!url_op}"
+
+  mkdir -p "$shome/vendor/op-${OP_VERSION}"
+  pushd "$shome/vendor/op-${OP_VERSION}"
+  unzip "${DATA}/cache/curl/$fnm_op"
+  chmod 755 "op"
+  popd
 }
 
 main "$@"

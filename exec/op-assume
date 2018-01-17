@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile"
+
+  local nm_account="$1"; shift
+
+  export OP_SESSION="$(gpg2 -q -d "${BOARD_PATH}/.op/${nm_account}.gpg" | op signin "${nm_account}" --output=raw)"
+  
+  if [[ "$#" == 0 ]]; then
+    exec "$SHELL"
+  else
+    exec "$@"
+  fi
+}
+
+source sub-chain "$BASH_SOURCE" "$@"
