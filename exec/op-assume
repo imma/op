@@ -4,6 +4,8 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile"
 
+  set -x
+
   local nm_account="$1"; shift
 
   export "OP_SESSION_${nm_account}"="$(gpg2 -q -d "${BOARD_PATH}/.op/${nm_account}.gpg" | op signin "${nm_account}" --output=raw)"

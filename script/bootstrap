@@ -14,7 +14,7 @@ function main {
 
   mkdir -p "$shome/vendor/op-${OP_VERSION}"
   pushd "$shome/vendor/op-${OP_VERSION}"
-  unzip "${DATA}/cache/curl/$fnm_op"
+  unzip -f "${DATA}/cache/curl/$fnm_op"
   chmod 755 "op"
   popd
 }
