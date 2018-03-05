@@ -1,15 +1,1 @@
-#!/usr/bin/env bash
-
-function main {
-  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
-  source "$shome/script/profile"
-
-  if [[ -x "$shome/vendor/op-${OP_VERSION}/op" ]]; then
-    exec "$shome/vendor/op-${OP_VERSION}/op" "$@"
-  fi
-
-  echo "ERROR: op not installed"
-  return 1
-}
-
-source sub "$BASH_SOURCE" "$@"
+/Users/ubuntu/work/op/vendor/op-0.3/op
