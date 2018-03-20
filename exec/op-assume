@@ -11,7 +11,8 @@ function main {
   local attempts=1
   while true; do
     if [[ ! -f "$pth_session" ]]; then
-      gpg2 -q -d "${BOARD_PATH}/.op/${nm_account}.gpg" | op signin "${nm_account}" --output=raw | gpg2 -e -a -r "$(cat ~/.config/gpg-recipient 2>/dev/null || gpg2 --card-status 2>&1 | grep 'General key info' | awk '{print $NF}' | cut -d'<' -f2 | cut -d'>' -f1)" > "$pth_session"
+      gpg2 -q -d "${BOARD_PATH}/.op/${nm_account}.gpg" | op signin "${nm_account}" --output=raw \
+        | gpg2 -e -a -r "$( (gpg2 --card-status 2>&1 | grep 'General key info' | awk '{print $NF}' | cut -d'<' -f2 | cut -d'>' -f1; echo "${CONFIG_GPG_RECIPIENT:-}") | head -1)" > "$pth_session"
     fi
 
     export "OP_SESSION_${nm_account}"="$(gpg2 -q -d "$pth_session")"
