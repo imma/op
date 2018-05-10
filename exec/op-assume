@@ -17,7 +17,7 @@ function main {
 
     export "OP_SESSION_${nm_account}"="$(gpg2 -q -d "$pth_session")"
 
-    if op get vault "meh-$$" 2>&1 | grep "Vault meh-$$ not found" >/dev/null 2>&1; then
+    if op get vault "meh-$$" 2>&1 | grep -i "vault meh-$$ not found" >/dev/null 2>&1; then
       break
     fi
 
