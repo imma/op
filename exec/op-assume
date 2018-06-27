@@ -10,18 +10,18 @@ function main {
 
   local attempts=1
   while true; do
-    if [[ ! -f "$pth_session" ]]; then
-      gpg2 -q -d "${BOARD_PATH}/.op/${nm_account}.gpg" | op signin "${nm_account}" --output=raw \
-        | gpg2 -e -a -r "$( (gpg2 --card-status 2>&1 | grep 'General key info' | awk '{print $NF}' | cut -d'<' -f2 | cut -d'>' -f1; echo "${CONFIG_GPG_RECIPIENT:-}") | head -1)" > "$pth_session"
+    local session="$(pass "1password-${nm_account}-session" 2>/dev/null)"
+
+    if [[ -z "$session" ]]; then
+      pass "1password-${nm_account}" | op signin "${nm_account}" --output=raw | pass add -m "1password-${nm_account}-session"
     fi
 
-    export "OP_SESSION_${nm_account}"="$(gpg2 -q -d "$pth_session")"
+    export "OP_SESSION_${nm_account}"="$(pass "1password-${nm_account}-session" 2>/dev/null)"
 
     if op get vault "meh-$$" 2>&1 | grep -i "vault meh-$$ not found" >/dev/null 2>&1; then
       break
     fi
 
-    rm -f "${pth_session}"
     attempts="$((attempts + 1))"
     if [[ "$attempts" -gt 2 ]]; then
       echo "ERROR: unable to get a valid 1Password session" 1>&2
