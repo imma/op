@@ -17,6 +17,7 @@ function main {
     export "OP_SESSION_${nm_account}"="$(pass "1password-${nm_account}-session" 2>/dev/null)"
 
     if op get vault "meh-$$" 2>&1 | grep -i "vault meh-$$ not found" >/dev/null 2>&1; then
+      pass rm -f "1password-${nm_account}-session" 1>/dev/null 2>&1 || true
       break
     fi
 
